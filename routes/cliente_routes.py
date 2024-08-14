@@ -191,7 +191,7 @@ async def get_pagamento(request: Request, id_pedido: int = Path(...)):
         "back_urls": {
             "success": f"{url_de_retorno_do_mp}/cliente/mp/sucesso/{pedido.id}",
             "failure": f"{url_de_retorno_do_mp}/cliente/mp/falha/{pedido.id}",
-            "pending": f"{url_de_retorno_do_mp}/cliente/mp/pedente/{pedido.id}",
+            "pending": f"{url_de_retorno_do_mp}/cliente/mp/pendente/{pedido.id}",
         },
         "auto_return": "approved",
     }
