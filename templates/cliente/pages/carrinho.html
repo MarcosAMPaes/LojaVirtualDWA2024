@@ -32,7 +32,7 @@
                 <form action="/cliente/post_reduzir_item" method="post" class="d-inline-block">
                     <input type="hidden" name="id_produto" value="{{i.id_produto}}">
                     <button class="btn btn-sm btn-danger">
-                        <i class="bi bi-dash"></i>x
+                        <i class="bi bi-dash"></i>
                     </button>
                 </form>
                 <span class="mx-2">{{i.quantidade}}</span>
@@ -45,14 +45,12 @@
             </td>
             <td>{{"{:,.2f}".format(i.valor_item)}}</td>
             <td>
-                <form action="/cliente/post_remover_item" method="post" class="d-inline-block">
-                    <input type="hidden" name="id_produto" value="{{i.id_produto}}">
-                    <button class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </form>
+                <button class="btn btn-sm btn-danger">
+                    <i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#confirmarExcluir{{ i.id_produto }}"></i>
+                </button>
             </td>
         </tr>
+        {% include "includes/modal_confirmar_excluir_item_carrinho.html" %}
         {% endfor %}
     </tbody>
     <tfoot>

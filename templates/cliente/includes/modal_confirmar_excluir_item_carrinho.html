@@ -1,0 +1,22 @@
+<div class="modal fade" id="confirmarExcluir{{ i.id_produto }}" tabindex="-1" data-bs-backdrop="static"
+            data-bs-keyboard="false" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                            Confirmação
+                        </h5>
+                    </div>
+                    <div class="modal-body">Deseja realmente remover <b>{{i.nome_produto}}</b> do carrinho ?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Não
+                        </button>
+                        <form action="/cliente/post_remover_item" method="post">
+                            <input type="hidden" name="id_produto" value="{{i.id_produto}}">
+                            <button class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
