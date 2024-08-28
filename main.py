@@ -1,17 +1,17 @@
 from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
-from repositories.cliente_repo import ClienteRepo
+from repositories.usuario_repo import UsuarioRepo
 from repositories.item_pedido_repo import ItemPedidoRepo
 from repositories.pedido_repo import PedidoRepo
 from repositories.produto_repo import ProdutoRepo
-from routes import main_routes, cliente_routes
+from routes import cliente_routes, main_routes
 from util.auth import checar_permissao, middleware_autenticacao
 from util.exceptions import configurar_excecoes
 
 ProdutoRepo.criar_tabela()
 ProdutoRepo.inserir_produtos_json("sql/produtos.json")
-ClienteRepo.criar_tabela()
-ClienteRepo.inserir_clientes_json("sql/clientes.json")
+UsuarioRepo.criar_tabela()
+UsuarioRepo.inserir_usuarios_json("sql/usuarios.json")
 PedidoRepo.criar_tabela()
 ItemPedidoRepo.criar_tabela()
 app = FastAPI(dependencies=[Depends(checar_permissao)])
