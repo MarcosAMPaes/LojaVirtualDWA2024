@@ -131,6 +131,8 @@ class PedidoRepo:
             with obter_conexao() as conexao:
                 cursor = conexao.cursor()
                 tupla = cursor.execute(SQL_OBTER_POR_ID, (id,)).fetchone()
+                if not tupla:
+                    return None
                 pedido = Pedido(*tupla)
                 return pedido
         except sqlite3.Error as ex:
@@ -198,6 +200,23 @@ class PedidoRepo:
                     SQL_OBTER_POR_ESTADO,
                     (
                         id_cliente,
+                        estado,
+                    ),
+                ).fetchall()
+                pedidos = [Pedido(*t) for t in tuplas]
+                return pedidos
+        except sqlite3.Error as ex:
+            print(ex)
+            return None
+        
+    @classmethod
+    def obter_todos_por_estado(cls, estado: int) -> List[Pedido]:
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                tuplas = cursor.execute(
+                    SQL_OBTER_TODOS_POR_ESTADO,
+                    (
                         estado,
                     ),
                 ).fetchall()
