@@ -65,5 +65,8 @@ async def obter_pedidos(id_pedido: int = Path(..., title="Id do pedido", ge = 1)
 
 @router.get("/obter_pedidos/{estado}")
 async def obter_pedidos_por_estado(estado: EstadoPedido = Path(..., title="Id do pedido",)):
-    pedidos = obter_pedidos_por_estado(estado.value)
-    return pedidos
+    pedidos = PedidoRepo.obter_todos_por_estado(estado.value)
+    print(pedidos)
+    if pedidos: return pedidos
+    pd = ProblemDetailsDto("int", f"O pedido com id {estado} não foi encontrado", "value_not_found", ["body", "id_produto"])
+    return JSONResponse(pd.to_dict(), status_code = 404)
