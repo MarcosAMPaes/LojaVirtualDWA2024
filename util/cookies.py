@@ -1,5 +1,6 @@
 NOME_COOKIE_AUTH = "jwt-token"
 TEMPO_COOKIE_AUTH = 24*3600
+NOME_HEADER_AUTH = "Authorization"
 
 
 
