@@ -4,7 +4,7 @@ from dtos.novo_produto_dto import NovoProdutoDTO
 from repositories.produto_repo import ProdutoRepo
 
 
-router = APIRouter(prefix="/manager")
+router = APIRouter(prefix="/admin")
 
 
 @router.get("/obter_produtos")
