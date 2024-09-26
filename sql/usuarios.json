@@ -1,13 +1,25 @@
 [
     {
         "id": 0,
-        "nome": "Admnistrador geral",
+        "nome": "Administrador Geral",
         "cpf": "000.000.000-00",
         "data_nascimento": "1900-01-01",
         "endereco": "",
-        "telefone": "(00) 00000-00000",
+        "telefone": "(00) 00000-0000",
         "email": "admin@email.com",
         "perfil": "0",
+        "senha": "$2b$12$TJYfq2QCDwstKUtrpx6ZK.wnKS2AXPqhcKGVsffuVetYg1eUTMot2",
+        "token": ""
+    },
+    {
+        "id": 1,
+        "nome": "João Silva",
+        "cpf": "123.456.789-01",
+        "data_nascimento": "1980-01-01",
+        "endereco": "Rua A, 123",
+        "telefone": "(11) 99999-8888",
+        "email": "joao@email.com",
+        "perfil": "1",
         "senha": "$2b$12$TJYfq2QCDwstKUtrpx6ZK.wnKS2AXPqhcKGVsffuVetYg1eUTMot2",
         "token": ""
     },

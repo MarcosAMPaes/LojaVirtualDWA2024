@@ -29,7 +29,7 @@ class UsuarioRepo:
                         usuario.telefone,
                         usuario.email,
                         usuario.perfil,
-                        usuario.senha
+                        usuario.senha                        
                     ),
                 )
                 if cursor.rowcount > 0:
@@ -40,7 +40,7 @@ class UsuarioRepo:
             return None
 
     @classmethod
-    def obter_todos_por_perfil(cls, perfil:int = 1) -> List[Usuario]:
+    def obter_todos_por_perfil(cls, perfil: int = 1) -> List[Usuario]:
         try:
             with obter_conexao() as conexao:
                 cursor = conexao.cursor()
@@ -97,7 +97,7 @@ class UsuarioRepo:
             return None
 
     @classmethod
-    def obter_quantidade_por_perfil(cls, perfil:int = 1) -> Optional[int]:
+    def obter_quantidade_por_perfil(cls, perfil: int = 1) -> Optional[int]:
         try:
             with obter_conexao() as conexao:
                 cursor = conexao.cursor()

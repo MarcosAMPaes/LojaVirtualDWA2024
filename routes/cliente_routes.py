@@ -13,7 +13,7 @@ from repositories.usuario_repo import UsuarioRepo
 from repositories.item_pedido_repo import ItemPedidoRepo
 from repositories.pedido_repo import PedidoRepo
 from repositories.produto_repo import ProdutoRepo
-from util.auth_cookie import conferir_senha, obter_hash_senha
+from util.auth import conferir_senha, obter_hash_senha
 from util.cookies import (
     adicionar_mensagem_alerta,
     adicionar_mensagem_erro,
@@ -22,7 +22,7 @@ from util.cookies import (
 )
 from util.templates import obter_jinja_templates
 
-router = APIRouter(prefix="/cliente", include_in_schema= False)
+router = APIRouter(prefix="/cliente", include_in_schema=False)
 templates = obter_jinja_templates("templates/cliente")
 
 
@@ -251,6 +251,7 @@ async def get_mp_pendente(
     PedidoRepo.alterar_estado(id_pedido, EstadoPedido.PAGO.value)
     return RedirectResponse(f"/cliente/detalhespedido/{id_pedido}")
 
+
 @router.post("/post_adicionar_carrinho", response_class=RedirectResponse)
 async def post_adicionar_carrinho(request: Request, id_produto: int = Form(...)):
     produto = ProdutoRepo.obter_um(id_produto)
@@ -348,6 +349,7 @@ async def post_reduzir_item(request: Request, id_produto: int = Form(0)):
     )
     PedidoRepo.atualizar_valor_total(pedido_carrinho.id)
     return response
+
 
 @router.post("/post_remover_item", response_class=RedirectResponse)
 async def post_remover_item(request: Request, id_produto: int = Form(0)):
