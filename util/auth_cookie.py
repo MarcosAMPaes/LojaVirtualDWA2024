@@ -31,13 +31,14 @@ async def checar_autenticacao(request: Request, call_next):
 
 
 async def checar_autorizacao(request: Request):
-    cliente = request.state.usuario if hasattr(request.state, "usuario") else None
+    usuario = request.state.usuario if hasattr(request.state, "usuario") else None
     area_do_cliente = request.url.path.startswith("/cliente")
     area_do_admin = request.url.path.startswith("/admin")
-    if (area_do_cliente or area_do_admin) and not cliente:
+    if (area_do_cliente or area_do_admin) and not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    if (area_do_cliente and cliente.perfil != 1) or (area_do_admin and cliente.perfil != 0):
+    if (area_do_cliente and usuario.perfil != 1) or (area_do_admin and usuario.perfil != 0):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
 
 def obter_hash_senha(senha: str) -> str:
     try:
@@ -54,8 +55,20 @@ def conferir_senha(senha: str, hash_senha: str) -> bool:
         return False
 
 
-def criar_token(length: int = 32) -> str:
+def gerar_token(length: int = 32) -> str:
     try:
         return secrets.token_hex(length)
     except ValueError:
         return ""
+
+
+def configurar_swagger_auth(app):
+    app.openapi_schema = app.openapi()
+    app.openapi_schema["components"]["securitySchemes"] = {
+        "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+    app.openapi_schema["security"] = [{"BearerAuth": []}]
