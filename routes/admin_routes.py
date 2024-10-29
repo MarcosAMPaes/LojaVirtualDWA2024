@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from dtos.alterar_pedido_dto import AlterarPedidoDto
 from dtos.alterar_produto_dto import AlterarProdutoDto
 from dtos.id_produto_dto import IdProdutoDto
+from dtos.id_usuario_dto import IdUsuarioDto
 from dtos.inserir_produto_dto import InserirProdutoDto
 from dtos.problem_details_dto import ProblemDetailsDto
 from models.pedido_model import EstadoPedido
@@ -100,3 +101,17 @@ async def obter_pedidos_por_estado(estado: EstadoPedido = Path(..., title="Estad
     await asyncio.sleep(1)
     pedidos = PedidoRepo.obter_todos_por_estado(estado.value)
     return pedidos
+
+@router.get("/obter_usuarios")
+async def obter_usuarios():
+    usuarios = UsuarioRepo.obter_todos()
+    if not usuarios:
+        pd = ProblemDetailsDto("int", f"Nenhum usuario foi encontrado", "value_not_found", ["body", "id_usuario"])
+        return JSONResponse(pd.to_dict(), status_code=404)
+    return usuarios
+
+@router.post("/excluir_usuario", status_code=204)
+async def excluir_usuario(inputDto: IdUsuarioDto):
+    if UsuarioRepo.excluir(inputDto.id_usuario): return None
+    pd = ProblemDetailsDto("int", f"O usuario com id <b>{inputDto.id_usuario}</b> não foi encontrado.", "value_not_found", ["body", "id_produto"])
+    return JSONResponse(pd.to_dict(), status_code=404)
