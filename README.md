@@ -1,4 +1,4 @@
-# Loja Virtual
+# Loja Virtual - <Marcos Antonio Mendes Paes>
 
 (22 de outubro de 2024)
 
