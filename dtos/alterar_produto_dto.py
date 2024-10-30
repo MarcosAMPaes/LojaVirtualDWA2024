@@ -37,6 +37,6 @@ class AlterarProdutoDto(BaseModel):
 
     @field_validator("estoque")
     def validar_estoque(cls, v):
-        msg = is_in_range(v, "Estoque", 0, 1000)
+        msg = is_in_range(v, "Estoque", 0, 10000)
         if msg: raise ValueError(msg)
         return v
