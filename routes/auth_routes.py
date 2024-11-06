@@ -19,4 +19,4 @@ async def entrar(entrar_dto: EntrarDto):
         pd = ProblemDetailsDto("str", f"Credenciais inválidas. Certifique-se de que está cadastrado e de que sua senha está correta.", "value_not_found", ["body", "email", "senha"])
         return JSONResponse(pd.to_dict(), status_code=404)
     token = criar_token(cliente_entrou.id, cliente_entrou.nome, cliente_entrou.email, cliente_entrou.perfil)
-    return JSONResponse({"token": token})
+    return JSONResponse({"token": token}, status_code=200)

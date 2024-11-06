@@ -1,15 +1,16 @@
 import asyncio
-from fastapi import APIRouter, Path
+from typing import List
+from fastapi import APIRouter, Body, Form, Path
 from fastapi.responses import JSONResponse
 
 from dtos.alterar_pedido_dto import AlterarPedidoDto
 from dtos.alterar_produto_dto import AlterarProdutoDto
 from dtos.id_produto_dto import IdProdutoDto
-from dtos.id_usuario_dto import IdUsuarioDto
 from dtos.inserir_produto_dto import InserirProdutoDto
 from dtos.problem_details_dto import ProblemDetailsDto
 from models.pedido_model import EstadoPedido
 from models.produto_model import Produto
+from models.usuario_model import Usuario
 from repositories.item_pedido_repo import ItemPedidoRepo
 from repositories.pedido_repo import PedidoRepo
 from repositories.produto_repo import ProdutoRepo
@@ -32,13 +33,14 @@ async def inserir_produto(inputDto: InserirProdutoDto) -> Produto:
     return novo_produto
 
 @router.post("/excluir_produto", status_code=204)
-async def excluir_produto(inputDto: IdProdutoDto):
-    if ProdutoRepo.excluir(inputDto.id_produto): return None
-    pd = ProblemDetailsDto("int", f"O produto com id <b>{inputDto.id_produto}</b> não foi encontrado.", "value_not_found", ["body", "id_produto"])
+async def excluir_produto(id_produto: int = Form(...)):
+    if ProdutoRepo.excluir(id_produto): return None
+    pd = ProblemDetailsDto("int", f"O produto com id <b>{id_produto}</b> não foi encontrado.", "value_not_found", ["body", "id_produto"])
     return JSONResponse(pd.to_dict(), status_code=404)
 
 @router.get("/obter_produto/{id_produto}")
 async def obter_produto(id_produto: int = Path(..., title="Id do Produto", ge=1)):
+    await asyncio.sleep(1)
     produto = ProdutoRepo.obter_um(id_produto)
     if produto: return produto
     pd = ProblemDetailsDto("int", f"O produto com id <b>{id_produto}</b> não foi encontrado.", "value_not_found", ["body", "id_produto"])
@@ -58,15 +60,15 @@ async def alterar_pedido(inputDto: AlterarPedidoDto):
     pd = ProblemDetailsDto("int", f"O pedido com id <b>{inputDto.id}</b> não foi encontrado.", "value_not_found", ["body", "id"])
     return JSONResponse(pd.to_dict(), status_code=404)
 
-@router.post("/cancelar_pedido/{id_pedido}", status_code=204)
-async def cancelar_pedido(id_pedido: int = Path(..., title="Id do Pedido", ge=1)):
+@router.post("/cancelar_pedido", status_code=204)
+async def cancelar_pedido(id_pedido: int = Form(..., title="Id do Pedido", ge=1)):
     if PedidoRepo.alterar_estado(id_pedido, EstadoPedido.CANCELADO.value): 
         return None
     pd = ProblemDetailsDto("int", f"O pedido com id <b>{id_pedido}</b> não foi encontrado.", "value_not_found", ["body", "id"])
     return JSONResponse(pd.to_dict(), status_code=404)
 
-@router.post("/evoluir_pedido/{id_pedido}", status_code=204)
-async def cancelar_pedido(id_pedido: int = Path(..., title="Id do Pedido", ge=1)):
+@router.post("/evoluir_pedido", status_code=204)
+async def evoluir_pedido(id_pedido: int = Form(..., title="Id do Pedido", ge=1)):
     pedido = PedidoRepo.obter_por_id(id_pedido)
     if not pedido:
         pd = ProblemDetailsDto("int", f"O pedido com id <b>{id_pedido}</b> não foi encontrado.", "value_not_found", ["body", "id"])
@@ -103,15 +105,13 @@ async def obter_pedidos_por_estado(estado: EstadoPedido = Path(..., title="Estad
     return pedidos
 
 @router.get("/obter_usuarios")
-async def obter_usuarios():
-    usuarios = UsuarioRepo.obter_todos()
-    if not usuarios:
-        pd = ProblemDetailsDto("int", f"Nenhum usuario foi encontrado", "value_not_found", ["body", "id_usuario"])
-        return JSONResponse(pd.to_dict(), status_code=404)
+async def obter_usuarios() -> List[Usuario]:
+    await asyncio.sleep(1)
+    usuarios = UsuarioRepo.obter_todos()    
     return usuarios
 
 @router.post("/excluir_usuario", status_code=204)
-async def excluir_usuario(inputDto: IdUsuarioDto):
-    if UsuarioRepo.excluir(inputDto.id_usuario): return None
-    pd = ProblemDetailsDto("int", f"O usuario com id <b>{inputDto.id_usuario}</b> não foi encontrado.", "value_not_found", ["body", "id_produto"])
+async def excluir_usuario(id_usuario: int = Form(...)):
+    if UsuarioRepo.excluir(id_usuario): return None
+    pd = ProblemDetailsDto("int", f"O usuario com id <b>{id_usuario}</b> não foi encontrado.", "value_not_found", ["body", "id_produto"])
     return JSONResponse(pd.to_dict(), status_code=404)
