@@ -28,3 +28,4 @@ class Pedido:
     id_cliente: Optional[int] = None
     cliente: Optional[Usuario] = None
     itens: Optional[list[ItemPedido]] = None
+

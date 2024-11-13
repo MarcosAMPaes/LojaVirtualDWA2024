@@ -24,6 +24,12 @@ SQL_OBTER_TODOS_POR_PERFIL = """
     ORDER BY nome
 """
 
+SQL_OBTER_TODOS = """
+    SELECT id, nome, cpf, data_nascimento, endereco, telefone, email
+    FROM usuario
+    ORDER BY nome
+"""
+
 SQL_ALTERAR = """
     UPDATE usuario
     SET nome=?, cpf=?, data_nascimento=?, endereco=?, telefone=?, email=?
@@ -82,10 +88,4 @@ SQL_OBTER_BUSCA = """
 SQL_OBTER_QUANTIDADE_BUSCA = """
     SELECT COUNT(*) FROM usuario
     WHERE nome LIKE ? OR cpf LIKE ?
-"""
-
-SQL_OBTER_TODOS = """
-    SELECT id, nome, cpf, data_nascimento, endereco, telefone, email
-    FROM usuario
-    ORDER BY nome
 """
