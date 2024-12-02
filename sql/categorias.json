@@ -1,0 +1,51 @@
+[
+    {   "id": 1,
+        "nome": "Computadores",
+        "descricao": "Desktops, notebooks e acessórios para computadores."
+    },
+    {
+        "id": 2,
+        "nome": "Smartphones",
+        "descricao": "Celulares, capas, películas e acessórios para smartphones."
+    },
+    {
+        "id": 3,
+        "nome": "Gaming",
+        "descricao": "Consoles, jogos e periféricos para gamers."
+    },
+    {
+        "id": 4,
+        "nome": "Acessórios de Rede",
+        "descricao": "Roteadores, repetidores e equipamentos de rede."
+    },
+    {
+        "id": 5,
+        "nome": "Componentes de Hardware",
+        "descricao": "Peças como placas-mãe, processadores e memórias."
+    },
+    {
+        "id": 6,
+        "nome": "Áudio e Vídeo",
+        "descricao": "Fones de ouvido, caixas de som e equipamentos de streaming."
+    },
+    {
+        "id": 7,
+        "nome": "Periféricos",
+        "descricao": "Teclados, mouses, monitores e outros periféricos de computador."
+    },
+    {
+        "id": 8,
+        "nome": "Armazenamento",
+        "descricao": "HDs, SSDs, cartões de memória e pen drives."
+    },
+    {
+        "id": 9,
+        "nome": "Eletrônicos",
+        "descricao": "Drones, câmeras e gadgets eletrônicos em geral."
+    },
+    {
+        "id": 10,
+        "nome": "Energia",
+        "descricao": "Fontes, no-breaks, estabilizadores e baterias portáteis."
+    }
+]

@@ -1,26 +1,29 @@
 SQL_CRIAR_TABELA = """
     CREATE TABLE IF NOT EXISTS produto (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_categoria INTEGER,
         nome TEXT NOT NULL,
         preco FLOAT NOT NULL,
         descricao TEXT NOT NULL,
-        estoque INTEGER NOT NULL)
+        estoque INTEGER NOT NULL,
+        FOREIGN KEY(id_categoria) REFERENCES categoria(id)
+    )
 """
 
 SQL_INSERIR = """
-    INSERT INTO produto(nome, preco, descricao, estoque)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO produto(id_categoria, nome, preco, descricao, estoque)
+    VALUES (?, ?, ?, ?, ?)
 """
 
 SQL_OBTER_TODOS = """
-    SELECT id, nome, preco, descricao, estoque
-    FROM produto
-    ORDER BY nome
+    SELECT p.id, p.id_categoria, p.nome, p.preco, p.descricao, p.estoque
+    FROM produto p
+    ORDER BY p.nome
 """
 
 SQL_ALTERAR = """
     UPDATE produto
-    SET nome=?, preco=?, descricao=?, estoque=?
+    SET id_categoria=?, nome=?, preco=?, descricao=?, estoque=?
     WHERE id=?
 """
 
@@ -30,7 +33,7 @@ SQL_EXCLUIR = """
 """
 
 SQL_OBTER_UM = """
-    SELECT id, nome, preco, descricao, estoque
+    SELECT id, id_categoria, nome, preco, descricao, estoque
     FROM produto
     WHERE id=?
 """
@@ -40,9 +43,9 @@ SQL_OBTER_QUANTIDADE = """
 """
 
 SQL_OBTER_BUSCA = """
-    SELECT id, nome, preco, descricao, estoque
-    FROM produto
-    WHERE nome LIKE ? OR descricao LIKE ?
+    SELECT p.id, p.id_categoria, p.nome, p.preco, p.descricao, p.estoque
+    FROM produto p
+    WHERE p.nome LIKE ? OR p.descricao LIKE ?
     ORDER BY #1
     LIMIT ? OFFSET ?
 """

@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from repositories.categoria_repo import CategoriaRepo
 from repositories.usuario_repo import UsuarioRepo
 from repositories.item_pedido_repo import ItemPedidoRepo
 from repositories.pedido_repo import PedidoRepo
@@ -21,6 +22,10 @@ UsuarioRepo.criar_tabela()
 UsuarioRepo.inserir_usuarios_json("sql/usuarios.json")
 PedidoRepo.criar_tabela()
 ItemPedidoRepo.criar_tabela()
+CategoriaRepo.criar_tabela()
+CategoriaRepo.inserir_categorias_json("sql/categorias.json")
+
+
 app = FastAPI(dependencies=[Depends(checar_autorizacao)])
 app.add_middleware(
     CORSMiddleware,
