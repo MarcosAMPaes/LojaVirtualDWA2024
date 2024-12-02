@@ -1,8 +1,11 @@
+import asyncio
 import math
 from fastapi import APIRouter, HTTPException, Query, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from dtos.entrar_dto import EntrarDto
+from repositories.categoria_repo import CategoriaRepo
+from routes.admin_routes import SLEEP_TIME
 from util.html import ler_html
 from dtos.inserir_usuario_dto import InserirUsuarioDTO
 from models.usuario_model import Usuario
@@ -32,11 +35,14 @@ async def get_html(arquivo: str):
 @router.get("/")
 async def get_root(request: Request):
     produtos = ProdutoRepo.obter_todos()
+    categorias = CategoriaRepo.obter_todos()
     return templates.TemplateResponse(
         "pages/index.html",
         {
             "request": request,
             "produtos": produtos,
+            "categorias": categorias,
+            "categoria_selecionada": None,
         },
     )
 
@@ -153,5 +159,28 @@ async def get_buscar(
             "pagina_atual": p,
             "termo_busca": q,
             "ordem": o,
+        },
+    )
+
+
+@router.get("/obter_produtos_por_categoria/{id_categoria}")
+async def obter_produtos_por_categoria(request: Request, id_categoria: int):
+    await asyncio.sleep(SLEEP_TIME)
+    produtos = ProdutoRepo.obter_todos_por_categoria(id_categoria)
+    categoria = CategoriaRepo.obter_um(id_categoria)
+
+    mensagem = None
+
+    if not produtos:
+        mensagem = f"Nenhum produto encontrado para a categoria {categoria.nome}."  # Mensagem personalizada
+
+    return templates.TemplateResponse(
+        "pages/index.html",
+        {
+            "request": request,
+            "produtos": produtos,
+            "categorias": CategoriaRepo.obter_todos(),
+            "categoria_selecionada": id_categoria,
+            "mensagem": mensagem, 
         },
     )

@@ -167,11 +167,13 @@ class ProdutoRepo:
     @classmethod
     def obter_todos_por_categoria(cls, id_categoria: int):
         try:
+            query = SQL_OBTER_POR_CATEGORIA
             with obter_conexao() as conexao:
                 cursor = conexao.cursor()
-                produtos = cursor.execute(SQL_OBTER_POR_CATEGORIA, (id_categoria,)).fetchall()
+                produtos = cursor.execute(query, (id_categoria,)).fetchall()
                 produtos = [Produto(*produto) for produto in produtos]
                 return produtos
         except sqlite3.Error as ex:
             print(ex)
             return None
+    

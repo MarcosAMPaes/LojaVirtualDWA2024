@@ -241,13 +241,6 @@ async def excluir_categoria(id_categoria: int = Form(...)):
     return JSONResponse(pd.to_dict(), status_code=404)
 
 
-@router.get("/obter_produtos_por_categoria/{id_categoria}")
-async def obter_produtos_por_categoria(id_categoria: int):
-    await asyncio.sleep(SLEEP_TIME)
-    produtos = ProdutoRepo.obter_todos_por_categoria(id_categoria)
-    return produtos
-
-
 @router.post("/inserir_categoria", status_code=201)
 async def inserir_produto(nome: str = Form(...),
                           descricao: str = Form(...)):
