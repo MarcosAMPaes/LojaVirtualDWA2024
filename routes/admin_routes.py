@@ -2,16 +2,19 @@ import asyncio
 from io import BytesIO
 from PIL import Image
 from typing import List, Optional
-from fastapi import APIRouter, File, Form, Path, UploadFile
+from fastapi import APIRouter, Body, File, Form, Path, UploadFile
 from fastapi.responses import JSONResponse
 
 from dtos.alterar_pedido_dto import AlterarPedidoDto
 from dtos.alterar_produto_dto import AlterarProdutoDto
+from dtos.inserir_categoria_dto import InserirCategoriaDto
 from dtos.inserir_produto_dto import InserirProdutoDto
 from dtos.problem_details_dto import ProblemDetailsDto
+from models.categoria_model import Categoria
 from models.pedido_model import EstadoPedido
 from models.produto_model import Produto
 from models.usuario_model import Usuario
+from repositories.categoria_repo import CategoriaRepo
 from repositories.item_pedido_repo import ItemPedidoRepo
 from repositories.pedido_repo import PedidoRepo
 from repositories.produto_repo import ProdutoRepo
@@ -215,5 +218,51 @@ async def excluir_usuario(id_usuario: int = Form(...)):
         f"O usuario com id <b>{id_usuario}</b> não foi encontrado.",
         "value_not_found",
         ["body", "id_produto"],
+    )
+    return JSONResponse(pd.to_dict(), status_code=404)
+
+@router.get("/obter_categorias")
+async def obter_categorias() -> List[Categoria]:
+    await asyncio.sleep(SLEEP_TIME)
+    categorias = CategoriaRepo.obter_todos()
+    return categorias
+
+@router.post("/excluir_categoria", status_code=204)
+async def excluir_categoria(id_categoria: int = Form(...)):
+    await asyncio.sleep(SLEEP_TIME)
+    if CategoriaRepo.excluir(id_categoria):
+        return None
+    pd = ProblemDetailsDto(
+        "int",
+        f"A categoria com id <b>{id_categoria}</b> não foi encontrada.",
+        "value_not_found",
+        ["body", "id_categoria"],
+    )
+    return JSONResponse(pd.to_dict(), status_code=404)
+
+
+@router.get("/obter_produtos_por_categoria/{id_categoria}")
+async def obter_produtos_por_categoria(id_categoria: int):
+    await asyncio.sleep(SLEEP_TIME)
+    produtos = ProdutoRepo.obter_todos_por_categoria(id_categoria)
+    return produtos
+
+
+@router.post("/inserir_categoria", status_code=201)
+async def inserir_produto(nome: str = Form(...),
+                          descricao: str = Form(...)):
+    categoria_dto = InserirCategoriaDto(
+         nome= nome,
+         descricao= descricao
+    )
+    nova_categoria = Categoria(None, categoria_dto.nome, categoria_dto.descricao)
+    nova_categoria = CategoriaRepo.inserir(nova_categoria)
+    if nova_categoria:
+        return nova_categoria
+    pd = ProblemDetailsDto(
+        "int",
+        "Ocorreu um erro ao inserir a categoria.",
+        "insert_error",
+        ["body", "nome"],
     )
     return JSONResponse(pd.to_dict(), status_code=404)

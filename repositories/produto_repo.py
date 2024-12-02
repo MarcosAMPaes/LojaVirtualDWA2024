@@ -22,7 +22,7 @@ class ProdutoRepo:
                 cursor = conexao.cursor()
                 cursor.execute(
                     SQL_INSERIR,
-                    (produto.nome, produto.preco, produto.descricao, produto.estoque),
+                    (produto.id_categoria,produto.nome, produto.preco, produto.descricao, produto.estoque),
                 )
                 if cursor.rowcount > 0:
                     produto.id = cursor.lastrowid
@@ -51,6 +51,7 @@ class ProdutoRepo:
                 cursor.execute(
                     SQL_ALTERAR,
                     (
+                        produto.id_categoria,
                         produto.nome,
                         produto.preco,
                         produto.descricao,
@@ -162,3 +163,15 @@ class ProdutoRepo:
             if arquivo_imagem.is_file():
                 path_arquivo_destino = path_destino / arquivo_imagem.name
                 shutil.copy2(arquivo_imagem, path_arquivo_destino)
+
+    @classmethod
+    def obter_todos_por_categoria(cls, id_categoria: int):
+        try:
+            with obter_conexao() as conexao:
+                cursor = conexao.cursor()
+                produtos = cursor.execute(SQL_OBTER_POR_CATEGORIA, (id_categoria,)).fetchall()
+                produtos = [Produto(*produto) for produto in produtos]
+                return produtos
+        except sqlite3.Error as ex:
+            print(ex)
+            return None
