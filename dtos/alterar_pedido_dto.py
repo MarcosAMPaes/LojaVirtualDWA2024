@@ -12,4 +12,4 @@ class AlterarPedidoDto(BaseModel):
     def validar_id(cls, v):
         msg = is_greater_than(v, "Id", 0)
         if msg: raise ValueError(msg)
-        return v    
+        return v   

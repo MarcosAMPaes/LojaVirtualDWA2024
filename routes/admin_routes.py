@@ -102,7 +102,7 @@ async def obter_produto(id_produto: int = Path(..., title="Id do Produto", ge=1)
 async def alterar_produto(inputDto: AlterarProdutoDto):
     await asyncio.sleep(SLEEP_TIME)
     produto = Produto(
-        inputDto.id, inputDto.nome, inputDto.preco, inputDto.descricao, inputDto.estoque
+        inputDto.id, inputDto.id_categoria, inputDto.nome, inputDto.preco, inputDto.descricao, inputDto.estoque
     )
     if ProdutoRepo.alterar(produto):
         return None
@@ -257,5 +257,29 @@ async def inserir_produto(nome: str = Form(...),
         "Ocorreu um erro ao inserir a categoria.",
         "insert_error",
         ["body", "nome"],
+    )
+    return JSONResponse(pd.to_dict(), status_code=404)
+
+@router.get("/obter_categoria/{id_categoria}")
+async def obter_categoria(id_categoria: int = Path(..., title="Id da Categoria", ge=1)):
+    await asyncio.sleep(SLEEP_TIME)
+    categoria = CategoriaRepo.obter_um(id_categoria)
+    return categoria
+    
+@router.post("/alterar_categoria", status_code=204)
+async def alterar_categoria(
+    id: int = Form(...),
+    nome: str = Form(...),
+    descricao: str = Form(...),
+):
+    await asyncio.sleep(SLEEP_TIME)
+    categoria = Categoria(id, nome, descricao)
+    if CategoriaRepo.alterar(categoria):
+        return None
+    pd = ProblemDetailsDto(
+        "int",
+        f"A categoria com id <b>{id}</b> não foi encontrada.",
+        "value_not_found",
+        ["body", "id"],
     )
     return JSONResponse(pd.to_dict(), status_code=404)
