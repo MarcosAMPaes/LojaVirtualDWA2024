@@ -4,6 +4,7 @@ from util.validators import *
 
 
 class InserirProdutoDto(BaseModel):
+    id_categoria: int
     nome: str
     preco: float    
     descricao: str
@@ -31,5 +32,11 @@ class InserirProdutoDto(BaseModel):
     @field_validator("estoque")
     def validar_estoque(cls, v):
         msg = is_in_range(v, "Estoque", 0, 1000)
+        if msg: raise ValueError(msg)
+        return v
+    
+    @field_validator("id_categoria")
+    def validar_id_categoria(cls, v):
+        msg = is_greater_than(v, "Id Categoria", 0)
         if msg: raise ValueError(msg)
         return v

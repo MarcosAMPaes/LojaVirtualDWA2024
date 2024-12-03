@@ -34,17 +34,22 @@ async def obter_produtos():
 
 @router.post("/inserir_produto", status_code=201)
 async def inserir_produto(nome: str = Form(...),
+                          id_categoria: int = Form(...),
                           preco: float = Form(...),
                           descricao: str = Form(...),
                           estoque: int = Form(...),
                           imagem: Optional[UploadFile] = File(None)):
     produto_dto = InserirProdutoDto(
          nome= nome,
+         id_categoria= id_categoria,
          preco= preco,
          descricao= descricao,
          estoque= estoque
     )
-    conteudo_arquivo = await imagem.read()
+    try:
+        conteudo_arquivo = await imagem.read()
+    except Exception:
+        print("O arquivo enviado nao é uma imagem valida.")
     imagem = Image.open(BytesIO(conteudo_arquivo))
     if not imagem:
         pd = ProblemDetailsDto(
@@ -55,7 +60,7 @@ async def inserir_produto(nome: str = Form(...),
         )
         return JSONResponse(pd.to_dict(), status_code=422)
     await asyncio.sleep(SLEEP_TIME)
-    novo_produto = Produto(None, produto_dto.nome, produto_dto.preco, produto_dto.descricao, produto_dto.estoque)
+    novo_produto = Produto(None, produto_dto.id_categoria, produto_dto.nome, produto_dto.preco, produto_dto.descricao, produto_dto.estoque)
     novo_produto = ProdutoRepo.inserir(novo_produto)
     if novo_produto:
         imagem_quadrada = transformar_em_quadrada(imagem)

@@ -1,3 +1,7 @@
+# Marcos Antonio Mendes Paes
+# Lorenzo Rainha Gomes
+# Lucas Altoé
+
 # Loja Virtual
 
 (22 de outubro de 2024)
